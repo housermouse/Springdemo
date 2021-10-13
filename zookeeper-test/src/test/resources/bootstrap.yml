@@ -1,0 +1,23 @@
+ams:
+  config:
+    enabled: false
+  # 证书信任域
+  authority: livebos-server
+  # 根证书
+  ca:
+    certFile: classpath:cert/ca.pem
+  # 客户端证书
+  client:
+    certFile: classpath:cert/client.pem
+    keyFile: classpath:cert/client.pkcs8.pem
+  # 服务端证书
+  server:
+    certFile: classpath:cert/server.pem
+    keyFile: classpath:cert/server.pkcs8.pem
+  #注册中心
+  registry:
+    protocol: zk
+#    address: 127.0.0.1:2181
+    address: 192.168.3.134:2181,192.168.3.132:2181,192.168.3.133:2181
+  #zipkin:
+    #base-url: "http://localhost:9411"

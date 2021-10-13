@@ -1,0 +1,79 @@
+subprojects {
+    buildscript {
+        repositories {
+            maven {
+                url "https://maven.aliyun.com/repository/public"
+            }
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
+        }
+        dependencies {
+            classpath files('../libs/gradle-util-plugins-0.2.0-RELEASE.jar')
+        }
+    }
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+    ext {
+        springBootVersion = "2.3.7.RELEASE"
+        springDependencyManagement = "1.0.10.RELEASE"
+        springCloudVersion = "Hoxton.SR8"
+        liveVersion = "2.1.2-SNAPSHOT"
+        liveGatewayVersion="2.2.1-RC1"
+        grpcVersion =  "1.21.0"
+        protocVersion = "3.7.1"
+        aasVersion = "1.5.0-SNAPSHOT"
+//        aasVersion = "1.4.7-RC2"
+
+        amsVersion = "1.0.5-SNAPSHOT"
+        mysqlConnectionVersion = '8.0.15'
+    }
+    group = "com.apexsoft"
+    version = '1.0.0-SNAPSHOT'
+    sourceCompatibility = '1.8'
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    repositories {
+        maven {
+            url "https://maven.aliyun.com/repository/public"
+        }
+        maven {
+            credentials {
+                username = "${NEXUS_USER}"
+                password = "${NEXUS_PASSWORD}"
+            }
+            url "http://oss.apexsoft.com.cn/repository/maven-public/"
+        }
+    }
+
+    //依赖缓存时间
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+    // 上传source
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        classifier = 'sources'
+    }
+    publishing {
+        publications {
+            library(MavenPublication) {
+                from components.java
+                artifact sourcesJar
+            }
+        }
+        repositories {
+            maven {
+                credentials {
+                    username = "${NEXUS_USER}"
+                    password = "${NEXUS_PASSWORD}"
+                }
+                if (project.version.endsWith('-SNAPSHOT')) {
+                    url "http://oss.apexsoft.com.cn/repository/maven-snapshots/"
+                } else {
+                    url "http://oss.apexsoft.com.cn/repository/maven-releases/"
+                }
+            }
+        }
+    }
+}

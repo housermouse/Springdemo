@@ -1,0 +1,6 @@
+rootProject.name = 'springdemo'
+include 'zookeeper-test'
+include 'server'
+include 'config-service-test'
+include 'tomcat-test'
+

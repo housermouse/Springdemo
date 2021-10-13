@@ -1,0 +1,36 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}" apply false
+    id 'io.spring.dependency-management' version "${springDependencyManagement}"
+    id 'java'
+}
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom "com.apexsoft:live-spring-boot2-bom:${liveVersion}"
+    }
+}
+
+dependencies {
+    compile "com.apex:ams-common:${amsVersion}"
+    compile "com.apex:ams-server:${amsVersion}"
+    compile "com.apex:ams-client:${amsVersion}"
+    compile "com.apex:ams-services:${amsVersion}"
+    compile "com.apex:ams-spring-boot-starter:${amsVersion}"
+    compile "com.apex:ams-etcd:${amsVersion}"
+    compile "com.apex:ams-consul:${amsVersion}"
+    compile "com.apex:ams-eureka:${amsVersion}"
+
+    compile ("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}") {
+        exclude module: 'log4j-over-slf4j'
+        exclude module: 'logback-classic'
+    }
+
+    compile 'com.alibaba:druid-spring-boot-starter:1.1.16'
+
+    compile "mysql:mysql-connector-java:${mysqlConnectionVersion}"
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,12 @@
+dynamic:
+  modules:
+    - menuid: "001"
+      menuname: "测试菜单1"
+      logourl: "/logo1.css"
+      routeurl: "/static/html1"
+      routetype: "相对"
+    - menuid: "002"
+      menuname: "测试菜单2"
+      logourl: "/logo2.css"
+      routeurl: "/static/html2"
+      routetype: "相对"

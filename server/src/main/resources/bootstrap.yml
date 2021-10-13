@@ -1,0 +1,20 @@
+ams:
+  authority: livebos-server
+  ca:
+    certFile: classpath:cert/ca.pem
+  server:
+    port: 13600
+    certFile: classpath:cert/server.pem
+    keyFile: classpath:cert/server.pkcs8.pem
+  client:
+    certFile: classpath:cert/client.pem
+    keyFile: classpath:cert/client.pkcs8.pem
+  registry:
+    protocol: zk
+    address: 192.168.3.132:2181,192.168.3.133:2181,192.168.3.134:2181
+#    address: localhost:2181
+#    address: 192.168.3.17:2181
+  net:
+    #    ignoredInterfaces: docker0,veth.*
+    preferredNetworks: 192.168
+

@@ -1,0 +1,30 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}" apply false
+    id 'io.spring.dependency-management' version "${springDependencyManagement}"
+    id 'java'
+}
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom "com.apexsoft:live-spring-boot2-bom:${liveVersion}"
+    }
+}
+
+dependencies {
+    //基础
+    compile "com.apexsoft:live-spring-boot-starter:${liveVersion}"
+    compile "com.apexsoft:live-spring-boot-actuator-starter:${liveVersion}"
+    //compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile("com.apex.livegql:livegql-spring-boot-starter:1.3.1.d-SNAPSHOT")
+    compile("org.apache.zookeeper:zookeeper:3.4.10")
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
+    implementation("log4j:log4j:1.2.17")
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <!--日志输出表达式-->
+        <Property name="pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%-5level] %logger{30} - %msg%n</Property>
+    </Properties>
+    <Appenders>
+        <!--控制台输出-->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern}"/>
+        </Console>
+        <!--普通日志输出-->
+        <RollingRandomAccessFile name="ServerFile" fileName="logs/server.log"
+                                 filePattern="logs/server-%d{yyy-MM-dd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <!--按天归档-->
+                <TimeBasedTriggeringPolicy/>
+                <!--按大小归档-->
+                <SizeBasedTriggeringPolicy size="128MB"/>
+            </Policies>
+
+            <DefaultRolloverStrategy max="50">
+                <Delete basePath="logs/" maxDepth="10">
+                    <!-- 只保留14天内日志，超过15天删除 -->
+                    <IfLastModified age="15D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="SubProcessFile" fileName="logs/subProcess.log"
+                                 filePattern="logs/subProcess-%d{yyy-MM-dd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <!--按天归档-->
+                <TimeBasedTriggeringPolicy/>
+                <!--按大小归档-->
+                <SizeBasedTriggeringPolicy size="128MB"/>
+            </Policies>
+
+            <DefaultRolloverStrategy max="50">
+                <Delete basePath="logs/" maxDepth="10">
+                    <!-- 只保留14天内日志，超过15天删除 -->
+                    <IfLastModified age="15D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+        <!--异常日志输出-->
+        <RollingRandomAccessFile name="ServerErrorFile" fileName="logs/server-error.log"
+                                 filePattern="logs/server-error-%d{yyy-MM-dd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="128MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="50">
+                <Delete basePath="logs/" maxDepth="10">
+                    <!-- 只保留14天内日志，超过15天删除 -->
+                    <IfLastModified age="15D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+        <Async name="AsyncServerFile">
+            <AppenderRef ref="ServerFile"/>
+        </Async>
+        <Async name="AsyncServerErrorFile">
+            <AppenderRef ref="ServerErrorFile"/>
+        </Async>
+        <Async name="AsyncSubProcessFile">
+            <AppenderRef ref="SubProcessFile"/>
+        </Async>
+    </Appenders>
+    <Loggers>
+        <AsyncRoot level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="AsyncServerFile"/>
+            <AppenderRef ref="AsyncServerErrorFile" level="ERROR"/>
+        </AsyncRoot>
+        <!--定制日志打印级别-->
+        <!-- <Logger name="com.test" level="DEBUG" />-->
+        <!-- 子程序日志只写入文件，不写在控制台-->
+        <Logger name="com.apexsoft.utils" level="INFO" additivity="false">
+            <AppenderRef ref="AsyncSubProcessFile"/>
+        </Logger>
+        <Logger name="com.apexsoft" level="DEBUG">
+
+        </Logger>
+    </Loggers>
+</Configuration>
